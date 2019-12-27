@@ -17,7 +17,9 @@ under development
    ex2. test2.domain.com false
    true means you want to use proxy
    false will reveal your origin IP
-6. open crontab
+6. make run.sh executable
+> sudo chmod +x run.sh
+7. open crontab
 > crontab -e
-7. put this inside crontab, it will update your IP every 30 minutes.
+8. put this inside crontab, it will update your IP every 30 minutes.
 > */30 * * * * /path/to/run.sh
