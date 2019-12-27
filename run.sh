@@ -1,8 +1,11 @@
 #! /bin/bash
 
+DOMAIN_LIST="domain.lst"
+SECRET_FILE="secret.key"
+CURRENT_IP=$(curl -s ip.me)
 BASEURL="https://api.cloudflare.com/client/v4/zones/"
-APITOKEN=`egrep "^APITOKEN" secret.key| awk -F "=" '{print $2}'`
-ZONEID=`egrep "^ZONEID" secret.key| awk -F "=" '{print $2}'`
+APITOKEN=`egrep "^APITOKEN" "$SECRET_FILE"| awk -F "=" '{print $2}'`
+ZONEID=`egrep "^ZONEID" "$SECRET_FILE"| awk -F "=" '{print $2}'`
 CONTENT_TYPE="Content-Type:application/json"
 AUTH="Authorization: Bearer "
 
@@ -38,3 +41,8 @@ update_arecordip(){
          -d '{"type":"A","name":"'"$2"'","content":"'"$3"'","ttl":1,"proxied":'$4'}' | jq .success
 }
 
+while IFS=' ' read -r domain proxy
+do
+  RECORDID=$(get_recordid $domain)
+  update_arecordip "$RECORDID" "$domain" "$CURRENT_IP" "$proxy"
+done < "$DOMAIN_LIST"
