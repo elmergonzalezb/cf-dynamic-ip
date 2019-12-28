@@ -20,9 +20,9 @@ get_recordid(){
     #input  : subdomain
     #output : recordid
     #example: get_recordid "home.domain.com"
-    curl -s "$BASEURL""$ZONEID""/dns_records" -H "$CONTENT_TYPE" \
+    curl -s "$BASEURL""$ZONEID""/dns_records?type=A" -H "$CONTENT_TYPE" \
          -H "$AUTH$APITOKEN" | jq -r '.result|.[]|.id,.name' \
-         | grep "$1" -B1| grep -v "$1"
+         | egrep "^$1" -B1| grep -v "$1"
 }
 
 get_arecordip(){
