@@ -1,7 +1,8 @@
 #! /bin/bash
 
-DOMAIN_LIST="domain.lst"
-SECRET_FILE="secret.key"
+CURRENTDIR=$(dirname "$0")
+DOMAIN_LIST="$CURRENTDIR""/domain.lst"
+SECRET_FILE="$CURRENTDIR""/secret.key"
 CURRENT_IP=$(curl -s ip.me)
 BASEURL="https://api.cloudflare.com/client/v4/zones/"
 APITOKEN=`egrep "^APITOKEN" "$SECRET_FILE"| awk -F "=" '{print $2}'`
