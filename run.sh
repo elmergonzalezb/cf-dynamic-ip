@@ -12,7 +12,7 @@ AUTH="Authorization: Bearer "
 
 get_zoneid(){
     #input  : base domain
-    #output : zoneid 
+    #output : zoneid
     #example: get_zoneid "domain.com"
     curl -s "$BASEURL""?name=""$1" -H "$CONTENT_TYPE" -H "$AUTH$APITOKEN" | jq -r '.result|.[0]|.id'
 }
@@ -21,9 +21,8 @@ get_recordid(){
     #input  : subdomain
     #output : recordid
     #example: get_recordid "home.domain.com"
-    curl -s "$BASEURL""$ZONEID""/dns_records?type=A" -H "$CONTENT_TYPE" \
-         -H "$AUTH$APITOKEN" | jq -r '.result|.[]|.id,.name' \
-         | egrep "^$1" -B1| grep -v "$1"
+    curl -s "$BASEURL""$ZONEID""/dns_records?type=A&name=""$1" -H "$CONTENT_TYPE" \
+         -H "$AUTH$APITOKEN" | jq -r '.result|.[0]|.id'
 }
 
 get_arecordip(){
@@ -36,7 +35,7 @@ get_arecordip(){
 
 update_arecordip(){
     #input  : recordid, subdomain, newip, proxy(true/false)
-    #output : true/false 
+    #output : true/false
     #example: update_arecordip "abc123def456" "home.domain.com" "1.2.3.4" true
     curl -s -X PUT "$BASEURL""$ZONEID""/dns_records/""$1" -H "$CONTENT_TYPE" -H "$AUTH$APITOKEN" \
          -d '{"type":"A","name":"'"$2"'","content":"'"$3"'","ttl":1,"proxied":'$4'}' | jq .success
