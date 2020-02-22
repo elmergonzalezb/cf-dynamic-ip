@@ -1,7 +1,4 @@
 # cf-dynamic-ip
-
-under development
-
 ### 1. install jq
 > sudo apt install jq
 
